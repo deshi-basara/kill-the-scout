@@ -1,13 +1,15 @@
 package scraper
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/deshi-basara/kill-the-scout/database"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
+	"github.com/sirupsen/logrus"
 )
+
+var log = logrus.New()
 
 // Setup the colly collector used for scraping
 func setup() *colly.Collector {
@@ -38,12 +40,12 @@ func ScrapeResultList(url string) []string {
 
 	// set error handler
 	c.OnError(func(r *colly.Response, err error) {
-		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+		log.Errorf("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
 	})
 
 	// before making a request print
 	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Scraping", r.URL.String())
+		log.Infoln("Scraping list:", r.URL.String())
 	})
 
 	// start scraping the handed url
@@ -79,13 +81,11 @@ func ScrapeExpose(exposeID string) database.Expose {
 			Rooms:     rooms,
 			CreatedAt: time.Now(),
 		}
-
-		fmt.Printf("Expose scraped: %s\n", exposeID)
 	})
 
 	// before making a request print
 	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Scraping", r.URL.String())
+		log.Infoln("Scraping expose:", r.URL.String())
 	})
 
 	// start scraping the handed url

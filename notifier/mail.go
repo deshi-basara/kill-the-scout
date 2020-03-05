@@ -1,7 +1,6 @@
 package notifier
 
 import (
-	"log"
 	"net/smtp"
 	"net/textproto"
 	"os"
@@ -9,7 +8,10 @@ import (
 
 	"github.com/deshi-basara/kill-the-scout/database"
 	"github.com/jordan-wright/email"
+	"github.com/sirupsen/logrus"
 )
+
+var log = logrus.New()
 
 // SendMail send a mail to a given address
 func SendMail(to string, expose database.Expose) {
@@ -44,5 +46,7 @@ func SendMail(to string, expose database.Expose) {
 	))
 	if err != nil {
 		log.Fatalf("SendMail.Fatal: %s", err)
+	} else {
+		log.Info("Mail sent")
 	}
 }

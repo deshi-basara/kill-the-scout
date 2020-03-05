@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/asdine/storm/v3"
+	"github.com/asdine/storm"
 )
 
 // Expose represents one immobilienscout expose
@@ -42,4 +42,10 @@ func GetExpose(db *storm.DB, exposeID string) (Expose, error) {
 	err := db.One("ID", exposeID, &expose)
 
 	return expose, err
+}
+
+func ExposeExists(db *storm.DB, exposeID string) error {
+	_, err := db.GetBytes("Expose", exposeID)
+
+	return err
 }
