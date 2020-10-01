@@ -5,6 +5,7 @@ import (
 
 	"github.com/asdine/storm"
 	"github.com/bamzi/jobrunner"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/deshi-basara/kill-the-scout/database"
 	"github.com/deshi-basara/kill-the-scout/notifier"
 	"github.com/deshi-basara/kill-the-scout/scraper"
@@ -46,7 +47,9 @@ func (e KillTheScout) Run() {
 	db := database.Setup()
 
 	//  get all latest (at max 20) Exposes from the result-list and check if they were already scraped
-	results := scraper.ScrapeResultList(url)
+	// results := scraper.ScrapeResultList(url)
+	results := scraper.ScrapeResultListWithBrowser(url)
+	spew.Dump(results)
 
 	for _, exposeID := range results {
 		_, err := database.GetExpose(db, exposeID)
@@ -54,7 +57,7 @@ func (e KillTheScout) Run() {
 			log.Infoln("New expose found:", exposeID)
 
 			// scarpe and save expose
-			expose := scraper.ScrapeExpose(exposeID)
+			expose := scraper.ScrapeExposeWithBrowser(exposeID)
 			err := database.SaveExpose(db, expose)
 			if err != nil {
 				log.Fatalf("SaveExpose.Fatal: %s %s \n", err, err == storm.ErrNotFound)
