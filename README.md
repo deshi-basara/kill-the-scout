@@ -25,6 +25,17 @@ MAIL_TO=mail-me-exposes@mail.com
 Install `golang`, clone this repo and execute the following commands:
 
 ```
+# install go dependencies
 > go install
+
+# install selenium dependencies (inside _vendor)
+_vendor > go run init.go
+
+# run main application
 > go run main.go
 ```
+
+## Todo
+
+1. Find solution when immo24 robot-detection was triggered (because of an to aggressive scrape intervall).
+2. Load detail pages with a random delay to avoid robot-detection.

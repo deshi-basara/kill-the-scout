@@ -16,4 +16,5 @@
 .env
 .vscode
 *.db
-_vendor
+_vendor/*
+!_vendor/init.go
